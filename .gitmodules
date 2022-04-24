@@ -1,0 +1,6 @@
+[submodule "quiddler-validator"]
+	path = quiddler-validator
+	url = https://github.com/tituslesley89/quiddler-validator.git
+[submodule "dist"]
+	path = dist
+	url = https://github.com/tituslesley89/quiddler-validator.git
