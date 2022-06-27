@@ -1,17 +1,14 @@
 <template>
   <v-container>
     <v-row class="text-center">
-      <v-spacer />
       <v-col md="6">
         <v-card class="pa-5">
           <v-text-field v-model="wordToSearch" label="Word" clearable />
           <v-btn block class="primary" @click="checkWord">Search</v-btn>
         </v-card>
       </v-col>
-      <v-spacer />
     </v-row>
     <v-row>
-      <v-spacer />
       <v-col md="6">
         <v-card class="pa-5">
           <v-progress-linear
@@ -40,7 +37,6 @@
           <div v-else>Nothing found</div>
         </v-card>
       </v-col>
-      <v-spacer />
     </v-row>
   </v-container>
 </template>
@@ -66,8 +62,10 @@ export default {
         axios
           .get(`${this.baseUrl}/validate/${this.wordToSearch}`)
           .then((response) => {
-            this.isLoading = false;
             this.wordCheckResult = response.data;
+          })
+          .finally(() => {
+            this.isLoading = false;
           });
       }
     },
