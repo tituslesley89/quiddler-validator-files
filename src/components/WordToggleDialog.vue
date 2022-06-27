@@ -12,6 +12,9 @@
               label="Access Key"
               v-model="accessKey"
               :rules="requiredRule"
+              :type="showPassword ? 'text' : 'password'"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              @click:append="showPassword = !showPassword"
               required/>
             </v-row>
             <v-row>
@@ -70,6 +73,7 @@ import axios from "axios";
         requestSent : false,
         isLoading : false,
         valid : false,
+        showPassword : false,
         baseUrl: "https://i02k5kt7hj.execute-api.us-east-1.amazonaws.com/prod",
         requiredRule: [
           v => !!v || 'Required'

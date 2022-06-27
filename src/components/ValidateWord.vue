@@ -3,7 +3,7 @@
     <v-row class="text-center">
       <v-col md="6">
         <v-card class="pa-5">
-          <v-text-field v-model="wordToSearch" label="Word" clearable />
+          <v-text-field v-model="wordToSearch" label="Word" clearable @keyup.enter="checkWord"/>
           <v-btn block class="primary" @click="checkWord">Search</v-btn>
         </v-card>
       </v-col>
@@ -34,6 +34,11 @@
               <definitions-list :definitions="wordCheckResult.invalidDefinition" :is-invalid=true />
             </div>
           </div>
+          <div v-else-if="errorResponse">
+            <v-banner color="red" rounded>
+              Something went wrong :( Please try again.
+            </v-banner>
+          </div>
           <div v-else>Nothing found</div>
         </v-card>
       </v-col>
@@ -52,6 +57,7 @@ export default {
   data: () => ({
     wordToSearch: "",
     isLoading: false,
+    errorResponse : false,
     baseUrl: "https://i02k5kt7hj.execute-api.us-east-1.amazonaws.com/prod",
     wordCheckResult: undefined,
   }),
@@ -59,10 +65,16 @@ export default {
     checkWord() {
       if (this.wordToSearch) {
         this.isLoading = true;
+        this.errorResponse = false;
+        this.wordCheckResult = undefined;
         axios
           .get(`${this.baseUrl}/validate/${this.wordToSearch}`)
           .then((response) => {
             this.wordCheckResult = response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+            this.errorResponse = true;
           })
           .finally(() => {
             this.isLoading = false;
