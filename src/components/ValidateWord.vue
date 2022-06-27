@@ -36,7 +36,7 @@
           </div>
           <div v-else-if="errorResponse">
             <v-banner color="red" rounded>
-              Something went wrong :( Please try again.
+              Something went wrong :(
             </v-banner>
           </div>
           <div v-else>Nothing found</div>

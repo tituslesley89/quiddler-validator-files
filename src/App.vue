@@ -36,12 +36,6 @@
     </v-main>
     <word-toggle-dialog ref="wordDialog" :is-category=false />
     <word-toggle-dialog ref="categoryDialog" :is-category=true />
-
-    <head>
-      <meta charset="utf-8">
-        <link rel="shortcut icon" type="image/png" href="/static/favicon.png"/>
-    </head>
-
   </v-app>
 </template>
 
