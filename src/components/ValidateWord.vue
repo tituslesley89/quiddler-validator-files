@@ -1,0 +1,77 @@
+<template>
+  <v-container>
+    <v-row class="text-center">
+      <v-spacer />
+      <v-col md="6">
+        <v-card class="pa-5">
+          <v-text-field v-model="wordToSearch" label="Word" clearable />
+          <v-btn block class="primary" @click="checkWord">Search</v-btn>
+        </v-card>
+      </v-col>
+      <v-spacer />
+    </v-row>
+    <v-row>
+      <v-spacer />
+      <v-col md="6">
+        <v-card class="pa-5">
+          <v-progress-linear
+            v-if="isLoading"
+            indeterminate
+            color="cyan"
+          ></v-progress-linear>
+          <div v-else-if="wordCheckResult">
+            <v-banner v-if="wordCheckResult.isValid" color="green" rounded>
+              Word is valid
+            </v-banner>
+            <v-banner v-else color="red" rounded>
+              Word is invalid.
+              <br />
+              Reason: "{{ wordCheckResult.reason }}"
+            </v-banner>
+            <div class="pt-3" v-if="wordCheckResult.validDefinition && wordCheckResult.validDefinition.length">
+              <v-divider></v-divider>
+              <definitions-list :definitions="wordCheckResult.validDefinition" :is-invalid=false />
+            </div>
+            <div class="pt-3" v-if="wordCheckResult.invalidDefinition && wordCheckResult.invalidDefinition.length">
+              <v-divider></v-divider>
+              <definitions-list :definitions="wordCheckResult.invalidDefinition" :is-invalid=true />
+            </div>
+          </div>
+          <div v-else>Nothing found</div>
+        </v-card>
+      </v-col>
+      <v-spacer />
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import axios from "axios";
+import DefinitionsList from './DefinitionsList.vue';
+
+export default {
+  components: { DefinitionsList },
+  name: "ValidateWord",
+
+  data: () => ({
+    wordToSearch: "",
+    isLoading: false,
+    baseUrl: "https://i02k5kt7hj.execute-api.us-east-1.amazonaws.com/prod",
+    wordCheckResult: undefined,
+  }),
+  methods: {
+    checkWord() {
+      if (this.wordToSearch) {
+        this.isLoading = true;
+        axios
+          .get(`${this.baseUrl}/validate/${this.wordToSearch}`)
+          .then((response) => {
+            this.isLoading = false;
+            this.wordCheckResult = response.data;
+          });
+      }
+    },
+  },
+};
+</script>
+
